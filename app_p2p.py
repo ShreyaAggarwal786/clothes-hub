@@ -10,7 +10,7 @@ from huggingface_hub import snapshot_download
 from PIL import Image
 
 from model.cloth_masker import AutoMasker, vis_mask
-from model.pipeline import CatVTONPipeline, CatVTONPix2PixPipeline
+from model.pipeline import AIStylistPipeline, AIStylistPix2PixPipeline
 from utils import init_weight_dtype, resize_and_crop, resize_and_padding
 
 
@@ -120,7 +120,7 @@ def image_grid(imgs, rows, cols):
 args = parse_args()
 repo_path = snapshot_download(repo_id=args.ip_resume_path)
 # Pipeline
-pipeline_p2p = CatVTONPix2PixPipeline(
+pipeline_p2p = AIStylistPix2PixPipeline(
     base_ckpt=args.p2p_base_model_path,
     attn_ckpt=repo_path,
     attn_ckpt_version="mix-48k-1024",
@@ -131,7 +131,7 @@ pipeline_p2p = CatVTONPix2PixPipeline(
 
 # Pipeline
 repo_path = snapshot_download(repo_id=args.ip_resume_path)  
-pipeline = CatVTONPipeline(
+pipeline = AIStylistPipeline(
     base_ckpt=args.ip_base_model_path,
     attn_ckpt=repo_path,
     attn_ckpt_version="mix",
@@ -275,39 +275,16 @@ def person_example_fn(image_path):
     return image_path
 
 HEADER = """
-<h1 style="text-align: center;"> 🐈 CatVTON: Concatenation Is All You Need for Virtual Try-On with Diffusion Models </h1>
-<div style="display: flex; justify-content: center; align-items: center;">
-  <a href="http://arxiv.org/abs/2407.15886" style="margin: 0 2px;">
-    <img src='https://img.shields.io/badge/arXiv-2407.15886-red?style=flat&logo=arXiv&logoColor=red' alt='arxiv'>
-  </a>
-  <a href='https://huggingface.co/zhengchong/CatVTON' style="margin: 0 2px;">
-    <img src='https://img.shields.io/badge/Hugging Face-ckpts-orange?style=flat&logo=HuggingFace&logoColor=orange' alt='huggingface'>
-  </a>
-  <a href="https://github.com/Zheng-Chong/CatVTON" style="margin: 0 2px;">
-    <img src='https://img.shields.io/badge/GitHub-Repo-blue?style=flat&logo=GitHub' alt='GitHub'>
-  </a>
-  <a href="http://120.76.142.206:8888" style="margin: 0 2px;">
-    <img src='https://img.shields.io/badge/Demo-Gradio-gold?style=flat&logo=Gradio&logoColor=red' alt='Demo'>
-  </a>
-  <a href="https://huggingface.co/spaces/zhengchong/CatVTON" style="margin: 0 2px;">
-    <img src='https://img.shields.io/badge/Space-ZeroGPU-orange?style=flat&logo=Gradio&logoColor=red' alt='Demo'>
-  </a>
-  <a href='https://zheng-chong.github.io/CatVTON/' style="margin: 0 2px;">
-    <img src='https://img.shields.io/badge/Webpage-Project-silver?style=flat&logo=&logoColor=orange' alt='webpage'>
-  </a>
-  <a href="https://github.com/Zheng-Chong/CatVTON/LICENCE" style="margin: 0 2px;">
-    <img src='https://img.shields.io/badge/License-CC BY--NC--SA--4.0-lightgreen?style=flat&logo=Lisence' alt='License'>
-  </a>
-</div>
+<h1 style="text-align: center;"> AI-Stylist: Virtual Try-On with Diffusion Models </h1>
+<p style="text-align: center;"> An advanced virtual try-on system for seamless garment synthesis. </p>
 <br>
-· This demo and our weights are only for <span>Non-commercial Use</span>. <br>
-· You can try CatVTON in our <a href="https://huggingface.co/spaces/zhengchong/CatVTON">HuggingFace Space</a> or our <a href="http://120.76.142.206:8888">online demo</a> (run on 3090). <br>
-· Thanks to <a href="https://huggingface.co/zero-gpu-explorers">ZeroGPU</a> for providing A100 for our <a href="https://huggingface.co/spaces/zhengchong/CatVTON">HuggingFace Space</a>. <br>
-· SafetyChecker is set to filter NSFW content, but it may block normal results too. Please adjust the <span>`seed`</span> for normal outcomes.<br> 
+· This system and its weights are for <span>Non-commercial, Educational Use</span>. <br>
+· Built with high-efficiency Latent Diffusion Models. <br>
+· SafetyChecker is enabled to ensure appropriate content generation. Please adjust the <span>`seed`</span> if results are unexpectedly blocked.<br> 
 """
 
 def app_gradio():
-    with gr.Blocks(title="CatVTON") as demo:
+    with gr.Blocks(title="AI-Stylist") as demo:
         gr.Markdown(HEADER)
         with gr.Tab("Mask-based Virtual Try-On"):
             with gr.Row():

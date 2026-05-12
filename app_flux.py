@@ -151,8 +151,8 @@ def person_example_fn(image_path):
 
 
 def app_gradio():
-    with gr.Blocks(title="CatVTON with FLUX.1-Fill-dev") as demo:
-        gr.Markdown("# CatVTON with FLUX.1-Fill-dev")
+    with gr.Blocks(title="AI-Stylist with FLUX") as demo:
+        gr.Markdown("# AI-Stylist with FLUX (Powered by FLUX.1-Fill-dev)")
         with gr.Row():
             with gr.Column(scale=1, min_width=350):
                 with gr.Row():

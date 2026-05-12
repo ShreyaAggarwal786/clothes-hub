@@ -7,7 +7,7 @@ from diffusers.image_processor import VaeImageProcessor
 from tqdm import tqdm
 from PIL import Image, ImageFilter
 
-from model.pipeline import CatVTONPipeline
+from model.pipeline import AIStylistPipeline
 
 class InferenceDataset(Dataset):
     def __init__(self, args):
@@ -252,7 +252,7 @@ def to_pil_image(images):
 def main():
     args = parse_args()
     # Pipeline
-    pipeline = CatVTONPipeline(
+    pipeline = AIStylistPipeline(
         attn_ckpt_version=args.dataset_name,
         attn_ckpt=args.resume_path,
         base_ckpt=args.base_model_path,

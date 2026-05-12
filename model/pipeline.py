@@ -20,7 +20,7 @@ from utils import (compute_vae_encodings, numpy_to_pil, prepare_image,
                    prepare_mask_image, resize_and_crop, resize_and_padding)
 
 
-class CatVTONPipeline:
+class AIStylistPipeline:
     def __init__(
         self, 
         base_ckpt, 
@@ -215,7 +215,7 @@ class CatVTONPipeline:
         return image
 
 
-class CatVTONPix2PixPipeline(CatVTONPipeline):
+class AIStylistPix2PixPipeline(AIStylistPipeline):
     def auto_attn_ckpt_load(self, attn_ckpt, version):
         # TODO: Temperal fix for the model version
         if os.path.exists(attn_ckpt):

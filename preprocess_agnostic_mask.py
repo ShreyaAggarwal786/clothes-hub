@@ -20,7 +20,7 @@ def parse_args():
         type=str,
         default="zhengchong/CatVTON",
         help=(
-            "The Path or repo name of CatVTON. "
+            "The Path or repo name of the AI-Stylist model. "
         ),
     )
     args = parser.parse_args()
