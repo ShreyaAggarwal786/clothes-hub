@@ -27,12 +27,18 @@ We recommend using Conda to manage dependencies:
 # Create and activate the environment
 conda create -n ai-stylist python==3.9.0 -y
 conda activate ai-stylist
-
+```bash
 # Install dependencies
 pip install -r requirements.txt
 ```
 
-### 2. Checkpoints
+### 3. Run on Google Colab
+For those without a local GPU, we provide a dedicated notebook for easy setup and remote execution:
+1. Upload `Colab_Run.ipynb` to Google Colab.
+2. Run the cells to install dependencies and launch the interface.
+3. Access the app via the generated `.gradio.live` public link.
+
+### 4. Checkpoints
 The model weights will be automatically downloaded during the first run of the Gradio app or inference script.
 
 ---
