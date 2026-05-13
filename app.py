@@ -182,7 +182,9 @@ def submit_function(gender, height, chest, waist, hips,
     masked_person = vis_mask(person_image, mask)
     save_result_image = image_grid([person_image, masked_person, cloth_image, result_image], 1, 4)
     save_result_image.save(result_save_path)
-    recommendation_html = get_recommendation_html(gender, height, chest, waist, hips); if show_type == \"result only\":
+    
+    recommendation_html = get_recommendation_html(gender, height, chest, waist, hips)
+    if show_type == "result only":
         return result_image, recommendation_html
     else:
         width, height = person_image.size
@@ -195,8 +197,8 @@ def submit_function(gender, height, chest, waist, hips,
         conditions = conditions.resize((condition_width, height), Image.NEAREST)
         new_result_image = Image.new("RGB", (width + condition_width + 5, height))
         new_result_image.paste(conditions, (0, 0))
-        new_result_image.paste(result_image, (condition_width + 5, 0)); recommendation_html = get_recommendation_html(gender, height, chest, waist, hips); return new_result_image, recommendation_html
-    return new_result_image
+        new_result_image.paste(result_image, (condition_width + 5, 0))
+        return new_result_image, recommendation_html
 
 
 def person_example_fn(image_path):
@@ -222,7 +224,12 @@ def app_gradio():
                         interactive=True,
                         visible=False,
                     )
-                    gender = gr.Radio(label=\"Gender\", choices=[\"Men\", \"Women\"], value=\"Men\"); height = gr.Number(label=\"Height (cm)\", value=175); chest = gr.Number(label=\"Chest (cm)\", value=100); waist = gr.Number(label=\"Waist (cm)\", value=85); hips = gr.Number(label=\"Hips (cm)\", value=95); person_image = gr.ImageEditor(
+                    gender = gr.Radio(label="Gender", choices=["Men", "Women"], value="Men")
+                    height = gr.Number(label="Height (cm)", value=175)
+                    chest = gr.Number(label="Chest (cm)", value=100)
+                    waist = gr.Number(label="Waist (cm)", value=85)
+                    hips = gr.Number(label="Hips (cm)", value=95)
+                    person_image = gr.ImageEditor(
                         interactive=True, label="Person Image", type="filepath"
                     )
 
@@ -241,7 +248,6 @@ def app_gradio():
                             value="upper",
                         )
 
-
                 submit = gr.Button("Submit")
                 gr.Markdown(
                     '<center><span style="color: #FF0000">!!! Click only Once, Wait for Delay !!!</span></center>'
@@ -254,11 +260,9 @@ def app_gradio():
                     num_inference_steps = gr.Slider(
                         label="Inference Step", minimum=10, maximum=100, step=5, value=50
                     )
-                    # Guidence Scale
                     guidance_scale = gr.Slider(
-                        label="CFG Strenth", minimum=0.0, maximum=7.5, step=0.5, value=2.5
+                        label="CFG Strength", minimum=0.0, maximum=7.5, step=0.5, value=2.5
                     )
-                    # Random Seed
                     seed = gr.Slider(
                         label="Seed", minimum=-1, maximum=10000, step=1, value=42
                     )
@@ -269,16 +273,16 @@ def app_gradio():
                     )
 
             with gr.Column(scale=2, min_width=500):
-                result_image = gr.Image(interactive=False, label=\"Result\"); size_result = gr.HTML()
+                result_image = gr.Image(interactive=False, label="Result")
+                size_result = gr.HTML()
                 with gr.Row():
-                    # Photo Examples
                     root_path = "resource/demo/example"
                     with gr.Column():
                         men_exm = gr.Examples(
                             examples=[
                                 os.path.join(root_path, "person", "men", _)
                                 for _ in os.listdir(os.path.join(root_path, "person", "men"))
-            
+                            ],
                             examples_per_page=4,
                             inputs=image_path,
                             label="Person Examples ①",
@@ -287,7 +291,7 @@ def app_gradio():
                             examples=[
                                 os.path.join(root_path, "person", "women", _)
                                 for _ in os.listdir(os.path.join(root_path, "person", "women"))
-            
+                            ],
                             examples_per_page=4,
                             inputs=image_path,
                             label="Person Examples ②",
@@ -300,7 +304,7 @@ def app_gradio():
                             examples=[
                                 os.path.join(root_path, "condition", "upper", _)
                                 for _ in os.listdir(os.path.join(root_path, "condition", "upper"))
-            
+                            ],
                             examples_per_page=4,
                             inputs=cloth_image,
                             label="Condition Upper Examples",
@@ -309,7 +313,7 @@ def app_gradio():
                             examples=[
                                 os.path.join(root_path, "condition", "overall", _)
                                 for _ in os.listdir(os.path.join(root_path, "condition", "overall"))
-            
+                            ],
                             examples_per_page=4,
                             inputs=cloth_image,
                             label="Condition Overall Examples",
@@ -318,7 +322,7 @@ def app_gradio():
                             examples=[
                                 os.path.join(root_path, "condition", "person", _)
                                 for _ in os.listdir(os.path.join(root_path, "condition", "person"))
-            
+                            ],
                             examples_per_page=4,
                             inputs=cloth_image,
                             label="Condition Reference Person Examples",
@@ -331,19 +335,12 @@ def app_gradio():
                 person_example_fn, inputs=image_path, outputs=person_image
             )
 
-            submit.click(submit_function, [gender, height, chest, waist, hips, person_image, cloth_image, cloth_type, num_inference_steps, guidance_scale, seed, show_type], [result_image, size_result]) # 
-
-
-
-
-
-
-
-
-
-
-result_image, size_result],
+            submit.click(
+                submit_function, 
+                [gender, height, chest, waist, hips, person_image, cloth_image, cloth_type, num_inference_steps, guidance_scale, seed, show_type], 
+                [result_image, size_result]
             )
+
     demo.queue().launch(share=True, show_error=True)
 
 
